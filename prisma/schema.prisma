@@ -1,0 +1,64 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  admin
+  user
+}
+
+model User {
+  u_id     Int     @id @default(autoincrement())
+  email    String  @unique
+  name     String?
+  password String
+  role     Role    @default(user)
+
+  places Place[]
+
+  createdAt DateTime @default(now())
+}
+
+model Category {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+
+  createdAt DateTime @default(now())
+
+  places Place[]
+}
+
+model Place {
+  id          Int     @id @default(autoincrement())
+  name        String
+  area        String?
+  description String?
+  latitude    Float
+  longitude   Float
+
+  createdAt DateTime @default(now())
+
+  category    Category @relation(fields: [category_id], references: [id], onDelete: Cascade)
+  category_id Int
+  user        User?    @relation(fields: [user_id], references: [u_id], onDelete: Cascade)
+  user_id     Int?
+
+  images PlaceImage[]
+}
+
+model PlaceImage {
+  id        Int      @id @default(autoincrement())
+  url       String
+  public_id String?
+  caption   String?
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+
+  place   Place? @relation(fields: [placeId], references: [id], onDelete: Cascade)
+  placeId Int?
+}
