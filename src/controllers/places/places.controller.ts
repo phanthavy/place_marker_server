@@ -7,10 +7,18 @@ exports.createPlace = async (req: Request, res: Response) => {
     const { name, area, description, latitude, longitude, category_id } =
       req.body;
 
-    if (latitude == null || longitude == null || category_id === null) {
+    if (
+      !name ||
+      !area ||
+      !description ||
+      !latitude ||
+      !longitude ||
+      category_id == null ||
+      category_id === ""
+    ) {
       return res.status(409).json({
         success: false,
-        message: "latitude, longitude and category are required",
+        message: "please fill all fields",
       });
     }
 
@@ -120,6 +128,7 @@ exports.getPlace = async (req: Request, res: Response) => {
               u_id: true,
               email: true,
               role: true,
+              name: true,
             },
           },
           images: {

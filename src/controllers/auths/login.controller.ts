@@ -37,7 +37,7 @@ exports.loginController = async (req: Request, res: Response) => {
 
     res
       .status(200)
-      .json({ success: true, message: "registered success", data: payload, token });
+      .json({ success: true, message: "login success", data: payload, token });
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: "server failed" });
